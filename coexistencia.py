@@ -34,7 +34,8 @@ def coexistencia(eos, Tr, plotPV=False, Vspace=(0.5,3,500)):
 
 
     def get_Vlims(pr0):
-        """Solve the inverted van der Waals equation for reduced volume.
+        
+        """Solve the inverted EOS for reduced volume.
 
         Return the lowest and highest reduced volumes such that the reduced
         pressure is pr0. It only makes sense to call this function for
@@ -42,11 +43,12 @@ def coexistencia(eos, Tr, plotPV=False, Vspace=(0.5,3,500)):
 
         """
 
-        eos = np.poly1d( (3*pr0, -(pr0+8*Tr), 9, -3) )
-        roots = eos.r
+        inv_eos = eos.inverse_eos(pr0, Tr)
+        roots = inv_eos.r
         roots.sort()
         Vrmin, _, Vrmax = roots
         return Vrmin, Vrmax
+    
 
     def get_area_difference(Vr0):
         """Return the difference in areas of the van der Waals loops.
