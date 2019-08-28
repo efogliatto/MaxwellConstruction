@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from scipy.integrate import quad
 from scipy.optimize import newton
 from scipy.signal import argrelextrema
+from PyAstronomy import pyaC
 
 
 
@@ -35,19 +36,18 @@ def coexistencia(eos, Tr, plotPV=False, Vspace=(0.5,3,500)):
 
     def get_Vlims(pr0):
         
-        """Solve the inverted EOS for reduced volume.
-
-        Return the lowest and highest reduced volumes such that the reduced
-        pressure is pr0. It only makes sense to call this function for
-        T<Tc, ie below the critical temperature where there are three roots.
-
+        """Cruce por cero de pr0 - pr
+        
+        Devuelve solo los extremos
         """
 
-        inv_eos = eos.inverse_eos(pr0, Tr)
-        roots = inv_eos.r
-        roots.sort()
-        Vrmin, _, Vrmax = roots
-        return Vrmin, Vrmax
+        Vextreme = pyaC.zerocross1d(Vr, pr0-pr)              
+
+        # Excepciones
+        assert len(Vextreme) == 3, '{} intersecciones entre PV y pr0. Posiblemente sea necesario modificar los límites de Vr'.format(len(Vextreme))
+        
+        return Vextreme[0], Vextreme[2]
+    
     
 
     def get_area_difference(Vr0):

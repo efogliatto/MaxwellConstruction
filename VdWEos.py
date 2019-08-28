@@ -31,12 +31,6 @@ class VdWEos:
         "Densidad cr\'itica"
 
         return 1. / (3. * self.__b)
-
-
-    def inverse_eos(self, pr0, Tr):
-        "Ecuacion de estado inversa: coeficientes de las potencias de Vr"
-        inv_eos = np.poly1d( (3*pr0, -(pr0+8*Tr), 9, -3) )
-        return inv_eos
     
     
     def __str__(self):

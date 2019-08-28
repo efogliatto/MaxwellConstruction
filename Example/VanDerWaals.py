@@ -35,7 +35,7 @@ vdw = mx.EOS('VanDerWaals')
 
 for T in [0.9, 0.8, 0.7, 0.6]:
 
-    Vrmin,Vrmax = mx.coexistencia(vdw, T, plotPV=False, Vspace=(0.43,20,2000))    
+    Vrmin,Vrmax = mx.coexistencia(vdw, T, plotPV=False, Vspace=(0.43,50,10000))    
 
     plt.plot(1/Vrmin,
              T,
