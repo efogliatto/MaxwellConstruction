@@ -78,9 +78,11 @@ def coexistencia(eos, Tr, plotPV=False, Vspace=(0.5,3,500)):
 
     if plotPV:
 
+        # plt.xlim((0.9*Vrmin, 1.1*Vrmax))
+        
         plt.plot(Vr, pr, linewidth=2, color='r')
 
-        plt.axhline(pr0)        
+        plt.axhline(pr0)
 
         Vrslice = []
 
