@@ -21,9 +21,10 @@ plt.plot(CS_liquid[0], CS_liquid[1], linestyle='-', color='b')
 
 cs = mx.EOS('Carnahan-Starling')
 
-for i,T in enumerate(np.linspace(0.7,0.99,10)):
+for i,T in enumerate(np.linspace(0.5,0.99,10)):
     
-    Vrmin,Vrmax = mx.coexistencia(cs, T, plotPV=False, Vspace=(0.3,40,10000))
+    Vrmin,Vrmax = mx.coexistencia(cs, T, plotPV=False, Vspace=(0.2,500,100000))
+    
 
     if i == 1:
     

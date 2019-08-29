@@ -33,9 +33,9 @@ plt.plot( analitica[2], analitica[0], linestyle = '-', color='r')
 
 vdw = mx.EOS('VanDerWaals')
 
-for T in [0.9, 0.8, 0.7, 0.6]:
+for T in np.linspace(0.5,0.99,10):
 
-    Vrmin,Vrmax = mx.coexistencia(vdw, T, plotPV=False, Vspace=(0.43,50,10000))    
+    Vrmin,Vrmax = mx.coexistencia(vdw, T, plotPV=False)    
 
     plt.plot(1/Vrmin,
              T,

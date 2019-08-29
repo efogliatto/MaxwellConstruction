@@ -1,13 +1,14 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.integrate import quad
+from scipy.integrate import quadrature
 from scipy.optimize import newton
 from scipy.signal import argrelextrema
 from PyAstronomy import pyaC
 
 
 
-def coexistencia(eos, Tr, plotPV=False, Vspace=(0.5,3,500)):
+def coexistencia(eos, Tr, plotPV=False, Vspace=(0.4,50,10000), root_method = 'step'):
     """
     Densidades de coexistencia
 
@@ -63,13 +64,55 @@ def coexistencia(eos, Tr, plotPV=False, Vspace=(0.5,3,500)):
 
         pr0 = eos.Pr(Tr, Vr0)
         Vrmin, Vrmax = get_Vlims(pr0)
-        return quad(lambda vr: eos.Pr(Tr, vr) - pr0, Vrmin, Vrmax)[0]
+        # return quad(lambda vr: eos.Pr(Tr, vr) - pr0, Vrmin, Vrmax)[0]
+        return quadrature(lambda vr: eos.Pr(Tr, vr) - pr0, Vrmin, Vrmax, maxiter=500, tol=1e-10)[0]
+
+
+
+    def step(adiff, Vr0):
+        """
+        Busqueda de igualdad de areas mediante la reducci\'on progresiva de Vr0.
+        Lento pero robusto. Util cuando no funciona Newton
+        """
+
+        fdiff = np.float64(get_area_difference(Vr0))
+
+        sdiff = fdiff
+
+        v0 = Vr0
+        v1 = Vr0
+    
+        while np.greater(fdiff*sdiff,0):
+            v0 = v1
+            v1 = 0.999*v1
+            sdiff = np.float64(get_area_difference(v1))
+    
+        return 0.5*v0 + 0.5*v1
+            
     
 
-    # Root finding by Newton's method determines Vr0 corresponding to
-    # equal loop areas for the Maxwell construction.
-    Vr0 = newton(get_area_difference, Vr0)
+
+
+    # Calculo de Vr0 que iguala las areas
+
+    if root_method == 'newton':
+        
+        Vr0 = newton(get_area_difference, Vr0)
+
+    elif root_method == 'step':
+
+        Vr0 = step(get_area_difference, Vr0)
+
+    else:
+
+        assert True, 'Unknown method'
+        
+
+
+    # Estimacion de p0 y limites
+
     pr0 = eos.Pr(Tr, Vr0)
+    
     Vrmin, Vrmax = get_Vlims(pr0)    
 
     
@@ -77,8 +120,6 @@ def coexistencia(eos, Tr, plotPV=False, Vspace=(0.5,3,500)):
 
 
     if plotPV:
-
-        # plt.xlim((0.9*Vrmin, 1.1*Vrmax))
         
         plt.plot(Vr, pr, linewidth=2, color='r')
 
@@ -109,4 +150,3 @@ def coexistencia(eos, Tr, plotPV=False, Vspace=(0.5,3,500)):
         
 
     return Vrmin,Vrmax
-    
