@@ -8,7 +8,7 @@ from PyAstronomy import pyaC
 
 
 
-def coexistencia(eos, Tr, plotPV=False, plotLog=False, Vspace=(0.4,50,10000), root_method = 'step'):
+def coexistencia(eos, Tr, plotPV=False, plotLog=False, Vspace=(0.4,50,10000), root_method = 'step', step_size=0.999):
     """
     Densidades de coexistencia
 
@@ -84,7 +84,7 @@ def coexistencia(eos, Tr, plotPV=False, plotLog=False, Vspace=(0.4,50,10000), ro
     
         while np.greater(fdiff*sdiff,0):
             v0 = v1
-            v1 = 0.9999*v1
+            v1 = step_size*v1
             sdiff = np.float64(get_area_difference(v1))
     
         return 0.5*v0 + 0.5*v1
