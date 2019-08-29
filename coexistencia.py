@@ -65,7 +65,7 @@ def coexistencia(eos, Tr, plotPV=False, plotLog=False, Vspace=(0.4,50,10000), ro
         pr0 = eos.Pr(Tr, Vr0)
         Vrmin, Vrmax = get_Vlims(pr0)
         # return quad(lambda vr: eos.Pr(Tr, vr) - pr0, Vrmin, Vrmax)[0]
-        return quadrature(lambda vr: eos.Pr(Tr, vr) - pr0, Vrmin, Vrmax, maxiter=1000, tol=1e-10)[0]
+        return quadrature(lambda vr: eos.Pr(Tr, vr) - pr0, Vrmin, Vrmax, maxiter=2000, tol=1e-10)[0]
 
 
 
@@ -84,7 +84,7 @@ def coexistencia(eos, Tr, plotPV=False, plotLog=False, Vspace=(0.4,50,10000), ro
     
         while np.greater(fdiff*sdiff,0):
             v0 = v1
-            v1 = 0.999*v1
+            v1 = 0.9999*v1
             sdiff = np.float64(get_area_difference(v1))
     
         return 0.5*v0 + 0.5*v1
