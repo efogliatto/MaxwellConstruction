@@ -21,9 +21,16 @@ import numpy as np
 
 prob = mx.EOS('Peng-Robinson', a = 3./49., b = 2./21., w = 0.344)
 
-for i,T in enumerate(np.linspace(0.8,0.99,10)):
+for i,T in enumerate(np.linspace(0.5,0.99,10)):
+
+    if T >= 0.8:
+        Vrmin,Vrmax = mx.coexistencia(prob, T, plotPV=False, Vspace=(0.3,50,10000))
+
+    else:
+        Vrmin,Vrmax = mx.coexistencia(prob, T, plotPV=False, Vspace=(0.28,4000,200000))        
+
     
-    Vrmin,Vrmax = mx.coexistencia(prob, T, plotPV=False, Vspace=(0.35,40,10000))
+    
 
     if i == 1:
     
@@ -71,4 +78,8 @@ plt.show()
 
 # # Unico caso
 
-# Vrmin,Vrmax = mx.coexistencia(prob, 0.8, plotPV=True, Vspace=(0.35,40,10000))
+# prob = mx.EOS('Peng-Robinson', a = 3./49., b = 2./21., w = 0.344)
+
+# Vrmin,Vrmax = mx.coexistencia(prob, 0.5, plotPV=True, plotLog=True, Vspace=(0.28,4000,200000))
+
+

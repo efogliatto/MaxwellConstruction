@@ -8,7 +8,7 @@ from PyAstronomy import pyaC
 
 
 
-def coexistencia(eos, Tr, plotPV=False, Vspace=(0.4,50,10000), root_method = 'step'):
+def coexistencia(eos, Tr, plotPV=False, plotLog=False, Vspace=(0.4,50,10000), root_method = 'step'):
     """
     Densidades de coexistencia
 
@@ -65,7 +65,7 @@ def coexistencia(eos, Tr, plotPV=False, Vspace=(0.4,50,10000), root_method = 'st
         pr0 = eos.Pr(Tr, Vr0)
         Vrmin, Vrmax = get_Vlims(pr0)
         # return quad(lambda vr: eos.Pr(Tr, vr) - pr0, Vrmin, Vrmax)[0]
-        return quadrature(lambda vr: eos.Pr(Tr, vr) - pr0, Vrmin, Vrmax, maxiter=500, tol=1e-10)[0]
+        return quadrature(lambda vr: eos.Pr(Tr, vr) - pr0, Vrmin, Vrmax, maxiter=1000, tol=1e-10)[0]
 
 
 
@@ -140,6 +140,10 @@ def coexistencia(eos, Tr, plotPV=False, Vspace=(0.4,50,10000), root_method = 'st
         
         plt.fill_between(Vrslice, pr0, prslice, interpolate=True, alpha=0.3)
 
+        if plotLog:
+            plt.yscale('log')
+            plt.xscale('log')
+            
         plt.xlabel('Volumen molar reducido')
 
         plt.ylabel('Presion reducida')        
