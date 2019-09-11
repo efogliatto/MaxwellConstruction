@@ -31,7 +31,13 @@ class VdWEos:
         "Densidad cr\'itica"
 
         return np.float64( 1. / (3. * self.__b) )
-    
+
+    def hvl(self, rhol, rhov, T):
+        "Calor latente"
+        hv = np.float64( (3./2. + 1/(1.-self.__b*rhov))*T - 2.*self.__a*rhov )
+        hl = np.float64( (3./2. + 1/(1.-self.__b*rhol))*T - 2.*self.__a*rhol )
+        return (hv - hl)
+        
     
     def __str__(self):
         msg = 'Ecuacion de estado de VanDerWaals. \na={}\nb={}'.format(self.__a,self.__b)
