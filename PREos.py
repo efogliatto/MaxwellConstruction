@@ -40,6 +40,27 @@ class PREos:
 
         return 0.253077 / self.__b
 
+
+    def hfg(self, rhol, rhov, T):
+        "Calor latente"
+        
+        phi = ( 1. + (0.37464 + 1.54226 * self.__w - 0.26992 * self.__w * self.__w) * (1 - np.sqrt(T/self.Tc()))  )**2
+        eta = 0.37464  +  1.54226*self.__w  -  0.26992*self.__w**2
+        num_l = 2.*self.__b**2*rhol - 2.*self.__b - 2.*np.sqrt(2.)*self.__b
+        num_v = 2.*self.__b**2*rhov - 2.*self.__b - 2.*np.sqrt(2.)*self.__b
+        den_l = 2.*self.__b**2*rhol - 2.*self.__b + 2.*np.sqrt(2.)*self.__b
+        den_v = 2.*self.__b**2*rhov - 2.*self.__b + 2.*np.sqrt(2.)*self.__b
+
+        h = self.__a * T * eta * np.sqrt(phi/(T*self.Tc()))   +   self.__a * phi
+        
+        h = h * np.log(num_v * den_l / (num_l * den_v))
+
+        h = h / (2.*np.sqrt(2.)*self.__b)
+
+        return h
+    
+             
+
     
     def __str__(self):
         msg = 'Ecuacion de estado de Peng-Robinson. \na={}\nb={}\nw={}'.format(self.__a,self.__b,self.__w)
